@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="th">
 <head>
   <meta charset="UTF-8">
@@ -65,6 +65,109 @@
     }
     .btn:hover:enabled { background: #c9a96e; color: #121110; }
     .btn[disabled] { opacity: 0.45; cursor: not-allowed; }
+    .btn-primary { background: #c9a96e; color: #121110; }
+    .btn-primary:hover:enabled { background: #b8944f; }
+
+    /* ── Selector dropdown ── */
+    .selector-wrap { position: relative; }
+    .selector-toggle {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      border: 1px solid #c9a96e;
+      background: transparent;
+      color: #c9a96e;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.62rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      padding: 0.75rem 1.4rem;
+      cursor: pointer;
+      transition: all 0.35s ease;
+    }
+    .selector-toggle:hover { background: #c9a96e; color: #121110; }
+    .selector-toggle .count-badge {
+      background: #c9a96e;
+      color: #121110;
+      border-radius: 50%;
+      width: 1.1rem;
+      height: 1.1rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.55rem;
+      font-weight: 600;
+      letter-spacing: 0;
+    }
+    .selector-toggle:hover .count-badge { background: #121110; color: #c9a96e; }
+    .selector-dropdown {
+      display: none;
+      position: absolute;
+      top: calc(100% + 6px);
+      right: 0;
+      width: 320px;
+      max-height: 420px;
+      overflow-y: auto;
+      background: #1a1815;
+      border: 1px solid rgba(201,169,110,0.25);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.6);
+      z-index: 200;
+      padding: 0.5rem 0;
+    }
+    .selector-dropdown.open { display: block; }
+    .selector-dropdown .sel-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.5rem 0.9rem;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .selector-dropdown .sel-header label {
+      font-size: 0.6rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #9a9288;
+      cursor: pointer;
+      user-select: none;
+    }
+    .selector-dropdown .sel-header label:hover { color: #c9a96e; }
+    .sel-item {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.45rem 0.9rem;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .sel-item:hover { background: rgba(201,169,110,0.08); }
+    .sel-item input[type="checkbox"] {
+      accent-color: #c9a96e;
+      width: 14px;
+      height: 14px;
+      flex-shrink: 0;
+      cursor: pointer;
+    }
+    .sel-item .sel-label {
+      font-size: 0.68rem;
+      color: #e8e4df;
+      line-height: 1.3;
+      flex: 1;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .sel-item .sel-id {
+      font-size: 0.55rem;
+      color: #6b665e;
+      flex-shrink: 0;
+    }
+    .sel-item img {
+      width: 28px;
+      height: 20px;
+      object-fit: cover;
+      border-radius: 2px;
+      flex-shrink: 0;
+    }
 
     /* ── A4 pages containing 2x2 = 4 cards of 90mm x 130mm ── */
     .page {
@@ -93,6 +196,7 @@
       color: #161614;
       font-family: Georgia, 'Times New Roman', serif;
       overflow: hidden;
+      border: 0.3mm solid #ccc;
     }
     .pc-brand {
       display: flex;
@@ -201,7 +305,16 @@
       <h1>Fine Art Gallery — 9×13 cm Exhibit Cards</h1>
       <p class="status" id="status">กำลังเตรียมการ์ด…</p>
     </div>
-    <button class="btn" id="printBtn" disabled>Print All</button>
+    <div style="display:flex;gap:0.6rem;align-items:center;flex-wrap:wrap;">
+      <div class="selector-wrap">
+        <button class="selector-toggle" id="selectorToggle">
+          Select Artworks <span class="count-badge" id="selCount">0</span>
+        </button>
+        <div class="selector-dropdown" id="selectorDropdown"></div>
+      </div>
+      <button class="btn" id="printSelBtn" disabled>Print Selected</button>
+      <button class="btn" id="printBtn" disabled>Print All</button>
+    </div>
   </div>
 
   <main id="cards"></main>
@@ -210,52 +323,52 @@
   <script>
     var items = [
       { id: "artwork-01", file: "image/color/43.JPG", category: "color", title: "Ganesha IX", artist: "ศิลปิน แดน 9",
-        type: "สีอะคริลิกบนผ้าใบ (Acrylic on Canvas)", size: "50 × 70 ซม.", price: "ติดต่อสอบถามเพื่อสนับสนุน", year: "2026",
+        type: "สีอะคริลิกบนผ้าใบ (Acrylic on Canvas)", size: "50 × 70 ซม.", price: "39,999 บาท", year: "2026",
         story: "ได้รับแรงบันดาลใจจากพระพิฆเนศ เทพแห่งปัญญาและศิลปะ ซึ่งเป็นที่เคารพสักการะในวัฒนธรรมไทย ภาพนี้ถูกเก็บรายละเอียดภายใต้แสงไฟในแดน 9 ด้วยความตั้งใจอย่างมาก เพื่อสื่อถึงการเริ่มต้นใหม่ การขจัดอุปสรรค และความหวังที่ศิลปะพาให้ผู้วาดค้นพบตัวเองอีกครั้ง" },
 
       { id: "artwork-02", file: "image/bw/13.jpg", category: "bw", title: "Graphite Study No. 1", artist: "ศิลปิน แดน 9",
-        type: "กราไฟต์บนกระดาษ (Graphite on Paper)", size: "A3 (30 × 42 ซม.)", price: "2,500 บาท", year: "2025",
+        type: "กราไฟต์บนกระดาษ (Graphite on Paper)", size: "A3 (30 × 42 ซม.)", price: "3,000 บาท", year: "2025",
         story: "การศึกษาน้ำหนักแสงและเงาผ่านเส้นกราไฟต์ละเอียด ผู้วาดฝึกฝนสายตาให้หยั่งรู้โครงสร้างของรูปทรงและการไล่โทนเสียงของพื้นผิว ภาพนี้คือบทเรียนแห่งความอดทนที่ค่อย ๆ ทอขึ้นทีละเส้น" },
 
       { id: "artwork-03", file: "image/bw/16.jpg", category: "bw", title: "Graphite Study No. 2", artist: "ศิลปิน แดน 9",
-        type: "กราไฟต์บนกระดาษ (Graphite on Paper)", size: "A3 (30 × 42 ซม.)", price: "2,500 บาท", year: "2025",
+        type: "กราไฟต์บนกระดาษ (Graphite on Paper)", size: "A3 (30 × 42 ซม.)", price: "3,000 บาท", year: "2025",
         story: "ภาพศึกษาต่อจากชุดแรก เน้นการสร้างมิติจากแสงธรรมชาติที่ส่องผ่านกรอบหน้าต่างเล็ก ๆ ของห้อง เพื่อบอกเล่าถึงความเงียบสงบและเวลาที่ไหลเอื่อยในแต่ละวัน" },
 
       { id: "artwork-04", file: "image/bw/19.jpg", category: "bw", title: "Ink on Paper No. 1", artist: "ศิลปิน แดน 9",
-        type: "หมึกบนกระดาษ (Ink on Paper)", size: "A4 (21 × 30 ซม.)", price: "1,800 บาท", year: "2025",
+        type: "หมึกบนกระดาษ (Ink on Paper)", size: "A4 (21 × 30 ซม.)", price: "2,600 บาท", year: "2025",
         story: "ผลงานหมึกเส้นอิสระที่ถูกวาดในลมหายใจเดียว ความไม่แน่นอนของเส้นน้ำหมึกสะท้อนถึงความกลัวและความกล้าที่ต้องเผชิญหน้า เพื่อค้นพบความหมายใหม่ของการให้อภัยตนเอง" },
 
       { id: "artwork-05", file: "image/bw/20.jpg", category: "bw", title: "Ink on Paper No. 2", artist: "ศิลปิน แดน 9",
-        type: "หมึกบนกระดาษ (Ink on Paper)", size: "A4 (21 × 30 ซม.)", price: "1,800 บาท", year: "2025",
+        type: "หมึกบนกระดาษ (Ink on Paper)", size: "A4 (21 × 30 ซม.)", price: "3,999 บาท", year: "2025",
         story: "เส้นหมึกที่ทับซ้อนกันกลายเป็นภูมิทัศน์เชิงนามธรรมของความคิด ผู้วาดต้องการแสดงให้เห็นว่าแม้ความมืดมนก็งดงามได้เสมอเมื่อจัดวางอย่างมีจังหวะ" },
 
       { id: "artwork-06", file: "image/bw/31.jpg", category: "bw", title: "Charcoal Portrait", artist: "ศิลปิน แดน 9",
-        type: "ถ่านชาร์โคลบนกระดาษ (Charcoal on Paper)", size: "A3 (30 × 42 ซม.)", price: "3,500 บาท", year: "2025",
+        type: "ถ่านชาร์โคลบนกระดาษ (Charcoal on Paper)", size: "A3 (30 × 42 ซม.)", price: "5,000 บาท", year: "2025",
         story: "ภาพเหมือนที่วาดจากความทรงจำของครอบครัว นัยน์ตาที่เต็มไปด้วยความปรารถนาและความเสียใจถูกถ่ายทอดผ่านเฉดสีเทาอ่อนเข้ม เพื่อระลึกว่าทุกคนมีเวลาให้แก้ไขความผิดพลาดได้เสมอ" },
 
       { id: "artwork-07", file: "image/bw/32.jpg", category: "bw", title: "Pencil Landscape", artist: "ศิลปิน แดน 9",
-        type: "ดินสอกราไฟต์บนกระดาษ (Graphite Pencil on Paper)", size: "A3 (30 × 42 ซม.)", price: "2,800 บาท", year: "2025",
+        type: "ดินสอกราไฟต์บนกระดาษ (Graphite Pencil on Paper)", size: "A3 (30 × 42 ซม.)", price: "2,600 บาท", year: "2025",
         story: "ทิวทัศน์ชนบทบ้านเกิดที่ถูกทอขึ้นจากความทรงจำ ต้นไม้ ท้องนา และสายลมที่พัดผ่าน กลายเป็นพื้นที่ปลอดภัยในใจที่ผู้วาดสามารถย้อนกลับไปเดินเล่นได้ทุกครั้งที่รู้สึกเดียวดาย" },
 
       { id: "artwork-08", file: "image/bw/5.jpg", category: "bw", title: "Monochrome Series I", artist: "ศิลปิน แดน 9",
-        type: "หมึกและถ่านบนกระดาษ (Ink & Charcoal)", size: "A3 (30 × 42 ซม.)", price: "2,200 บาท", year: "2025",
+        type: "หมึกและถ่านบนกระดาษ (Ink & Charcoal)", size: "A3 (30 × 42 ซม.)", price: "2,600 บาท", year: "2025",
         story: "ชุดงานขาวดำที่สำรวจความสัมพันธ์ระหว่างความเงียบกับเสียง ผ่านพื้นผิวที่ถูกขูด ขีด และเกลี่ยซ้ำแล้วซ้ำเล่า จนเกิดเป็นบทสนทนาทางภาพที่ไม่ต้องใช้คำพูด" },
 
       { id: "artwork-09", file: "image/bw/7.jpg", category: "bw", title: "Monochrome Series II", artist: "ศิลปิน แดน 9",
-        type: "หมึกและถ่านบนกระดาษ (Ink & Charcoal)", size: "A3 (30 × 42 ซม.)", price: "2,200 บาท", year: "2025",
+        type: "หมึกและถ่านบนกระดาษ (Ink & Charcoal)", size: "A3 (30 × 42 ซม.)", price: "2,000 บาท", year: "2025",
         story: "ภาคต่อของการค้นหาสมดุลในโลกขาวดำ เปรียบเสมือนชีวิตที่ต้องเลือกระหว่างความสว่างและเงามืด แล้วเรียนรู้ที่จะอยู่ร่วมกับทั้งสองอย่างได้อย่างสงบ" },
 
       { id: "artwork-10", file: "image/bw/8.jpg", category: "bw", title: "Shadows & Lines", artist: "ศิลปิน แดน 9",
-        type: "ถ่านชาร์โคลและหมึกบนกระดาษ (Charcoal & Ink)", size: "A3 (30 × 42 ซม.)", price: "3,000 บาท", year: "2025",
+        type: "ถ่านชาร์โคลและหมึกบนกระดาษ (Charcoal & Ink)", size: "A3 (30 × 42 ซม.)", price: "2,000 บาท", year: "2025",
         story: "เส้นตรงคือขอบเขต เงาคือสิ่งที่อยู่เลยขอบเขตไป ผู้วาดตั้งใจเล่นกับสองสิ่งนี้เพื่อบอกเล่าถึงกำแพงที่มองไม่เห็นภายในใจ และความปรารถนาที่จะข้ามผ่านมันไปให้ได้" },
 
       { id: "artwork-11", file: "image/bw/9.jpg", category: "bw", title: "Graphite Tonal Study", artist: "ศิลปิน แดน 9",
-        type: "กราไฟต์บนกระดาษ (Graphite on Paper)", size: "A3 (30 × 42 ซม.)", price: "2,400 บาท", year: "2025",
-        story: "แบบฝึกหัดการอ่านค่าโทนตั้งแต่ขาวจับถึงดำสนิท เหมือนการมองชีวิตจากหลายมุม เพราะบางครั้งความจริงก็ไม่ได้ดำหรือขาวเสมอไป แต่อยู่ที่เฉดกลางที่เราละเลย" },
+        type: "กราไฟต์บนกระดาษ (Graphite on Paper)", size: "A3 (30 × 42 ซม.)", price: "3,000 บาท", year: "2025",
+        story: "ท่ามกลางสายน้ำที่ไม่เคยหยุดนิ่ง พระพุทธองค์ยังคงนิ่งสงบ เพราะเมื่อจิตพบธรรม แม้พญานาคแห่งความกลัวก็กลายเป็นผู้พิทักษ์" },
 
       { id: "artwork-12", file: "image/color/1.jpg", category: "color", title: "Vibrant Horizon", artist: "ศิลปิน แดน 9",
         type: "สีอะคริลิกบนผ้าใบ (Acrylic on Canvas)", size: "60 × 90 ซม.", price: "9,500 บาท", year: "2026",
-        story: "ขอบฟ้าที่เต็มไปด้วยสีสันของคุณพ่อผู้เฝ้ารอวันครอบครัวได้อยู่พร้อมหน้า ผู้วาดหวังว่าสีสดใสเหล่านี้จะเดินข้ามกำแพงไปทักทายความรักที่กำลังรอเขาอยู่ข้างนอก" },
+        story: "หลวงปู่ศิลา ไม่เพียงเพื่อถ่ายทอดรูปลักษณ์ของพระสงฆ์รูปหนึ่ง แต่ต้องการบันทึก ความสงบและศรัทธาที่อยู่ภายในตัวท่าน ผ่านใบหน้าที่ผ่านกาลเวลา รอยย่น และแววตาที่นิ่งสงบ ลูกประคำที่ทอดยาวลงมาจากลำคอเปรียบเสมือน เส้นทางแห่งการภาวนา — เม็ดหนึ่งแทนแต่ละลมหายใจ แต่ละช่วงเวลาของชีวิต และแต่ละบทเรียนที่ผ่านเข้ามา แม้ร่างกายจะชราภาพ แต่ท่าทางของท่านกลับเต็มไปด้วยความมั่นคง ภาพนี้จึงเหมือนคำเตือนจากศิลปินว่า ความงดงามที่แท้จริงไม่ได้อยู่ที่วัยหรือรูปลักษณ์ แต่อยู่ที่จิตใจที่สงบและความดีที่เราทิ้งไว้ให้ผู้อื่น" },
 
       { id: "artwork-13", file: "image/color/2.jpg", category: "color", title: "Color Study No. 1", artist: "ศิลปิน แดน 9",
         type: "สีน้ำมันบนผ้าใบ (Oil on Canvas)", size: "40 × 50 ซม.", price: "6,500 บาท", year: "2025",
@@ -294,11 +407,11 @@
         story: "สายน้ำสีมรกตที่ผลักคลื่นเข้าหาฝั่งไม่รู้จบ ผู้วาดเคยนั่งมองทะเลในสารคดีทีวีเก่าในห้องนั่งรวม แล้วจินตนาการว่ามันคือเสียงอิสระที่คอยเรียกหาเขาให้พยายามต่อไป" },
 
       { id: "artwork-22", file: "image/color/17.jpg", category: "color", title: "Oil on Canvas I", artist: "ศิลปิน แดน 9",
-        type: "สีน้ำมันบนผ้าใบ (Oil on Canvas)", size: "60 × 90 ซม.", price: "ติดต่อสอบถามเพื่อสนับสนุน", year: "2026",
+        type: "สีน้ำมันบนผ้าใบ (Oil on Canvas)", size: "60 × 90 ซม.", price: "3,000 บาท", year: "2026",
         story: "ผลงานชิ้นใหญ่ชิ้นแรกที่ผู้วาดทุ่มเทเวลาเกือบสองเดือน เป็นเรื่องราวของการเดินทางจากความมืดสู่แสงสว่าง โดยใช้ภาพเรือกลางมหาสมุทรเป็นสัญลักษณ์ของความหวังที่ยังแล่นต่อไป" },
 
       { id: "artwork-23", file: "image/color/18.jpg", category: "color", title: "Oil on Canvas II", artist: "ศิลปิน แดน 9",
-        type: "สีน้ำมันบนผ้าใบ (Oil on Canvas)", size: "60 × 90 ซม.", price: "ติดต่อสอบถามเพื่อสนับสนุน", year: "2026",
+        type: "สีน้ำมันบนผ้าใบ (Oil on Canvas)", size: "60 × 90 ซม.", price: "5,400 บาท", year: "2026",
         story: "ชิ้นต่อจาก 'OIL ON CANVAS I' เป็นภาพยามเช้าที่เรือถึงฝั่ง ผู้วาดกล่าวว่าภาพนี้คือคำสัญญาที่ให้ไว้กับแม่ว่า เมื่อออกไป เขาจะใช้ชีวิตเหมือนหน้าใหม่ของผ้าใบที่ปราศจากรอยขีดฆ่า" },
 
       { id: "artwork-24", file: "image/color/21.jpg", category: "color", title: "Watercolor Bloom", artist: "ศิลปิน แดน 9",
@@ -342,7 +455,7 @@
         story: "ภาคต่อของการเดินทางในจินตนาการ ข้ามทุ่ง ผ่านลำธาร ไปจนถึงหมู่บ้านปลายทาง สะท้อนความเชื่อว่าถ้าใจยังมีแผนที่เพื่อนฝัน ก็ไม่มีกำแพงใดขวางกั้นได้จริง" },
 
       { id: "artwork-34", file: "image/color/33.jpg", category: "color", title: "Bold Strokes I", artist: "ศิลปิน แดน 9",
-        type: "สีอะคริลิกปาดมีด (Acrylic with Palette Knife)", size: "50 × 70 ซม.", price: "8,200 บาท", year: "2026",
+        type: "สีอะคริลิกปาดมีด (Acrylic with Palette Knife)", size: "50 × 50 ซม.", price: "4,200 บาท", year: "2026",
         story: "ฝีแปะที่หนักแน่นและเป็นชนวน ภาพนี้คือการปลดปล่อยอารมณ์ที่อัดแน่นมานานออกมาเป็นชั้นสีหนา ๆ เพื่อบอกทุกคนว่าแม้คนที่เคยพลาดก็ยังมีพลังสร้างความงามได้" },
 
       { id: "artwork-35", file: "image/color/34.jpg", category: "color", title: "Bold Strokes II", artist: "ศิลปิน แดน 9",
@@ -370,22 +483,27 @@
         story: "หุ่นนิ่งชุดที่สามกับมุมมองใหม่ เพื่อย้ำเตือนตนเองว่าการมองปัญหาจากมุมเดิมจะวนเวียนไม่จบ แต่การเปลี่ยนมุมเพียงเล็กน้อยก็เปิดทางออกที่คาดไม่ถึง" },
 
       { id: "artwork-41", file: "image/color/40.jpg", category: "color", title: "Mixed Media I", artist: "ศิลปิน แดน 9",
-        type: "เทคนิคผสมบนกระดาษ (Mixed Media on Paper)", size: "A3 (30 × 42 ซม.)", price: "4,500 บาท", year: "2026",
+        type: "เทคนิคผสมบนกระดาษ (Mixed Media on Paper)", size: "(50 × 50 ซม.)", price: "4,500 บาท", year: "2026",
         story: "ทดลองรวมถ่าน หมึก สีน้ำ และเศษกระดาษมาเกยทับกัน เป็นบทสนทนาระหว่างเทคนิคที่ต่างขั้ว เหมือนชีวิตที่ผสมผสานทั้งรอยแผลและยอดฝันไว้ในคนเดียวกัน" },
 
       { id: "artwork-42", file: "image/color/41.jpg", category: "color", title: "Mixed Media II", artist: "ศิลปิน แดน 9",
-        type: "เทคนิคผสมบนกระดาษ (Mixed Media on Paper)", size: "A3 (30 × 42 ซม.)", price: "4,500 บาท", year: "2026",
+        type: "เทคนิคผสมบนกระดาษ (Mixed Media on Paper)", size: "(50 × 50 ซม.)", price: "4,500 บาท", year: "2026",
         story: "การซ้อนทับชั้นของวัสดุต่างชนิดสะท้อนชั้นของความรู้สึกที่ถูกรักต่อกัน วันหนึ่งผู้วาดพบว่าความทรงจำทั้งดีและร้ายหลอมรวมเป็นตัวตนใหม่ที่ยืนหยัดได้อย่างมั่นคง" },
 
       { id: "artwork-43", file: "image/color/42.jpg", category: "color", title: "Mixed Media III", artist: "ศิลปิน แดน 9",
-        type: "เทคนิคผสมบนกระดาษ (Mixed Media on Paper)", size: "A3 (30 × 42 ซม.)", price: "ติดต่อสอบถามเพื่อสนับสนุน", year: "2026",
+        type: "เทคนิคผสมบนกระดาษ (Mixed Media on Paper)", size: "(50 × 50 ซม.)", price: "4,500 บาท", year: "2026",
         story: "ผลงานชุดสุดท้ายที่ผู้วาดรู้สึกว่ากล้าทุ่มเทที่สุด เพราะเป็นการรวมทุกอย่างที่เรียนมาไว้ในชิ้นเดียว เปรียบเสมือนบทสรุปว่าเขาพร้อมออกไปเล่าเรื่องใหม่ให้โลกฟังอย่างมีศักดิ์ศรี" }
     ];
 
     var cardsEl = document.getElementById('cards');
     var statusEl = document.getElementById('status');
     var printBtn = document.getElementById('printBtn');
+    var printSelBtn = document.getElementById('printSelBtn');
+    var selectorToggle = document.getElementById('selectorToggle');
+    var selectorDropdown = document.getElementById('selectorDropdown');
+    var selCountEl = document.getElementById('selCount');
     var total = items.length;
+    var selectedIds = new Set();
 
     function pageUrl() {
       return location.href.split('#')[0].replace(/\/print-all\.html$/, '/index.html');
@@ -467,8 +585,88 @@
       })();
     }
 
+    function updateSelCount() {
+      selCountEl.textContent = selectedIds.size;
+      printSelBtn.disabled = selectedIds.size === 0;
+    }
+
+    function toggleSelectAll() {
+      var allChecked = selectedIds.size === total;
+      if (allChecked) { selectedIds.clear(); } else { items.forEach(function(it) { selectedIds.add(it.id); }); }
+      syncCheckboxes();
+      updateSelCount();
+    }
+
+    function toggleItem(id) {
+      if (selectedIds.has(id)) { selectedIds.delete(id); } else { selectedIds.add(id); }
+      syncCheckboxes();
+      updateSelCount();
+    }
+
+    function syncCheckboxes() {
+      var allCb = selectorDropdown.querySelector('.sel-all-cb');
+      allCb.checked = selectedIds.size === total;
+      allCb.indeterminate = selectedIds.size > 0 && selectedIds.size < total;
+      items.forEach(function(it) {
+        var cb = selectorDropdown.querySelector('input[data-id="' + it.id + '"]');
+        if (cb) cb.checked = selectedIds.has(it.id);
+      });
+    }
+
+    function buildSelector() {
+      var html = '<div class="sel-header"><label><input type="checkbox" class="sel-all-cb"> Select All / None</label></div>';
+      items.forEach(function(it) {
+        var thumb = it.file;
+        html += '<label class="sel-item" data-id="' + it.id + '">' +
+          '<input type="checkbox" data-id="' + it.id + '">' +
+          '<img src="' + thumb + '" alt="">' +
+          '<span class="sel-label">' + it.title + '</span>' +
+          '<span class="sel-id">' + it.id.toUpperCase().replace('ARTWORK-','No. ') + '</span>' +
+        '</label>';
+      });
+      selectorDropdown.innerHTML = html;
+
+      selectorDropdown.querySelector('.sel-all-cb').addEventListener('change', toggleSelectAll);
+      items.forEach(function(it) {
+        selectorDropdown.querySelector('input[data-id="' + it.id + '"]').addEventListener('change', function() { toggleItem(it.id); });
+      });
+    }
+
+    selectorToggle.addEventListener('click', function(e) {
+      e.stopPropagation();
+      selectorDropdown.classList.toggle('open');
+    });
+    document.addEventListener('click', function(e) {
+      if (!selectorDropdown.contains(e.target) && e.target !== selectorToggle) {
+        selectorDropdown.classList.remove('open');
+      }
+    });
+
+    function buildCardsForSelection() {
+      var sel = items.filter(function(it) { return selectedIds.has(it.id); });
+      if (sel.length === 0) return;
+      cardsEl.innerHTML = '';
+      cardCount = 0;
+      var i = 0;
+      (function next() {
+        if (i >= sel.length) {
+          statusEl.textContent = 'พร้อมพิมพ์ ' + sel.length + ' ใบ (ขนาดการ์ด 9 × 13 ซม.)';
+          printSelBtn.disabled = false;
+          window.print();
+          return;
+        }
+        buildOne(sel[i], next);
+        i++;
+      })();
+    }
+
+    printSelBtn.addEventListener('click', function() {
+      buildCardsForSelection();
+    });
+
     printBtn.addEventListener('click', function() { window.print(); });
 
+    buildSelector();
     buildAll();
   </script>
 </body>
