@@ -199,7 +199,7 @@
       color: #161614;
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
       overflow: hidden;
-      border: 0.3mm solid #ccc;
+      border: 0.15mm solid rgba(204, 204, 204, 0.5);
     }
     .pc-img {
       flex: 1;
@@ -542,11 +542,9 @@
     var total = items.length;
     var selectedIds = new Set();
 
-    function pageUrl() {
-      return location.href.split('#')[0].replace(/\/print-all\.html$/, '/index.html');
-    }
     function artworkUrl(item) {
-      return pageUrl() + '#' + item.id;
+      var base = location.href.split('#')[0].replace(/\/print-all\.html$/, '');
+      return base + '#' + item.id;
     }
 
     function makeQr(el, url, size) {
