@@ -1,12 +1,13 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="th">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Fine Art Gallery</title>
+  <meta name="description" content="Fine Art Gallery - ผลงานวาดภาพและระบายสีจากผู้ต้องขัง ทัณฑสถานบำบัดพิเศษกลาง แดน 9">
+  <title>Fine Art Gallery — แดน 9</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -18,7 +19,6 @@
       --accent: #c9a96e;
       --accent-hover: #dfc08a;
       --border: rgba(255,255,255,0.06);
-      --shadow-color: 0deg 0% 0%;
     }
 
     html { scroll-behavior: smooth; }
@@ -32,22 +32,22 @@
       -webkit-font-smoothing: antialiased;
     }
 
-    /* ── Entrance Animation ── */
+    /* ── Animations ── */
     @keyframes galleryReveal {
       from { opacity: 0; transform: translateY(30px); }
-      to { opacity: 1; transform: translateY(0); }
+      to   { opacity: 1; transform: translateY(0); }
     }
     @keyframes fadeIn {
       from { opacity: 0; }
-      to { opacity: 1; }
+      to   { opacity: 1; }
     }
     @keyframes slideUp {
       from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
+      to   { opacity: 1; transform: translateY(0); }
     }
     @keyframes lineExpand {
       from { width: 0; }
-      to { width: 80px; }
+      to   { width: 80px; }
     }
 
     /* ── Header ── */
@@ -102,6 +102,7 @@
       justify-content: center;
       align-items: center;
       gap: 0.25rem;
+      flex-wrap: wrap;
       animation: fadeIn 0.8s ease 0.4s both;
     }
     .nav-bar button {
@@ -130,12 +131,8 @@
       transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
       transform: translateX(-50%);
     }
-    .nav-bar button:hover {
-      color: var(--text);
-    }
-    .nav-bar button:hover::after {
-      width: 60%;
-    }
+    .nav-bar button:hover { color: var(--text); }
+    .nav-bar button:hover::after { width: 60%; }
     .nav-bar button.active {
       color: var(--accent);
       border-color: rgba(201, 169, 110, 0.15);
@@ -169,32 +166,27 @@
     .gallery-item {
       break-inside: avoid;
       margin-bottom: 1.2rem;
+      animation: galleryReveal 0.6s ease both;
+    }
+    @media (min-width: 900px) { .gallery-item { margin-bottom: 1.4rem; } }
+    .gallery-item.hidden { display: none; }
+
+    .gallery-item .thumb {
       position: relative;
       overflow: hidden;
       cursor: pointer;
       transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
       will-change: transform;
-      animation: galleryReveal 0.6s ease both;
     }
-    @media (min-width: 900px) {
-      .gallery-item { margin-bottom: 1.4rem; }
-    }
-    .gallery-item.hidden {
-      display: none;
-    }
-    .gallery-item:hover {
-      transform: scale(1.015);
-    }
-    .gallery-item img {
+    .gallery-item .thumb:hover { transform: scale(1.015); }
+    .gallery-item .thumb img {
       display: block;
       width: 100%;
       height: auto;
       background: var(--bg-elevated);
       transition: filter 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     }
-    .gallery-item:hover img {
-      filter: brightness(0.55) saturate(0.8);
-    }
+    .gallery-item .thumb:hover img { filter: brightness(0.55) saturate(0.8); }
 
     .gallery-item .overlay {
       position: absolute;
@@ -214,9 +206,7 @@
         transparent 100%
       );
     }
-    .gallery-item:hover .overlay {
-      opacity: 1;
-    }
+    .gallery-item .thumb:hover .overlay { opacity: 1; }
     .overlay .title {
       font-family: 'Cormorant Garamond', Georgia, serif;
       font-size: 1.05rem;
@@ -224,63 +214,228 @@
       color: #fff;
       letter-spacing: 0.06em;
       margin-bottom: 0.4rem;
+      text-align: center;
     }
-    .overlay .meta {
-      display: flex;
-      align-items: center;
-      gap: 0.6rem;
-    }
+    .overlay .meta { display: flex; align-items: center; gap: 0.6rem; }
     .overlay .category-dot {
-      width: 5px;
-      height: 5px;
-      border-radius: 50%;
-      background: var(--accent);
+      width: 5px; height: 5px; border-radius: 50%; background: var(--accent);
     }
     .overlay .category-tag {
-      font-size: 0.6rem;
-      text-transform: uppercase;
-      letter-spacing: 0.2em;
-      color: rgba(255,255,255,0.7);
-      font-weight: 400;
+      font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.2em;
+      color: rgba(255,255,255,0.7); font-weight: 400;
     }
 
-    /* ── Lightbox ── */
+    /* card meta bar (always visible, mobile friendly) */
+    .card-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.9rem;
+      padding: 0.8rem 0.2rem 0;
+    }
+    .card-meta .card-title {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 0.95rem;
+      font-weight: 400;
+      letter-spacing: 0.04em;
+      line-height: 1.25;
+    }
+    .card-meta .cat-tag {
+      display: block;
+      font-size: 0.56rem;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: var(--text-muted);
+      margin-top: 0.2rem;
+    }
+    .card-meta .card-right {
+      display: flex;
+      align-items: center;
+      gap: 0.55rem;
+      flex-shrink: 0;
+    }
+    .card-meta .card-price {
+      color: var(--accent);
+      font-size: 0.72rem;
+      letter-spacing: 0.05em;
+      white-space: nowrap;
+      font-weight: 400;
+    }
+    .card-qr-btn {
+      background: transparent;
+      border: 1px solid rgba(201, 169, 110, 0.35);
+      color: var(--text-muted);
+      font-family: 'Inter', sans-serif;
+      font-size: 0.56rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      padding: 0.42rem 0.7rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      white-space: nowrap;
+    }
+    .card-qr-btn:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: rgba(201, 169, 110, 0.07);
+    }
+
+    /* ── Detail Modal ── */
     .lightbox {
       display: none;
       position: fixed;
       inset: 0;
       z-index: 2000;
       background: rgba(0, 0, 0, 0.95);
-      backdrop-filter: blur(30px);
-      -webkit-backdrop-filter: blur(30px);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
       align-items: center;
       justify-content: center;
-      padding: 2rem;
+      padding: 1rem;
     }
-    .lightbox.open {
-      display: flex;
-      animation: fadeIn 0.35s ease;
-    }
-    .lightbox-inner {
+    .lightbox.open { display: flex; animation: fadeIn 0.3s ease; }
+
+    .detail-panel {
       position: relative;
-      max-width: 90vw;
-      max-height: 85vh;
+      width: min(1240px, 100%);
+      max-height: 96vh;
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+      background: linear-gradient(165deg, #171512 0%, #0e0e0c 100%);
+      border: 1px solid var(--border);
+      box-shadow: 0 40px 120px rgba(0, 0, 0, 0.7);
+      animation: slideUp 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+    .detail-media {
+      position: relative;
+      background: #0b0b0a;
       display: flex;
       align-items: center;
       justify-content: center;
+      min-height: 260px;
+      overflow: hidden;
     }
-    .lightbox-inner img {
-      max-width: 90vw;
-      max-height: 85vh;
+    .detail-media img {
+      width: 100%;
+      height: 100%;
+      max-height: 96vh;
       object-fit: contain;
-      border-radius: 2px;
-      box-shadow: 0 20px 80px rgba(0,0,0,0.6);
-      animation: slideUp 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     }
+    .detail-info {
+      padding: 2.6rem 2.3rem 2rem;
+      overflow-y: auto;
+      max-height: 96vh;
+      display: flex;
+      flex-direction: column;
+    }
+    .detail-eyebrow {
+      font-size: 0.6rem;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--accent);
+      font-weight: 500;
+      margin-bottom: 0.9rem;
+    }
+    .detail-title {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: clamp(1.6rem, 3.4vw, 2.3rem);
+      font-weight: 400;
+      letter-spacing: 0.03em;
+      line-height: 1.15;
+      color: var(--text);
+    }
+    .detail-artist {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-style: italic;
+      font-size: 1rem;
+      color: var(--text-muted);
+      margin-top: 0.35rem;
+      letter-spacing: 0.05em;
+    }
+    .detail-rule {
+      width: 52px;
+      height: 1px;
+      background: var(--accent);
+      margin: 1.4rem 0;
+    }
+    .detail-facts {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 0.6rem;
+      margin-bottom: 1.5rem;
+    }
+    .fact {
+      border: 1px solid var(--border);
+      padding: 0.7rem 0.8rem;
+      background: rgba(255,255,255,0.015);
+    }
+    .fact .fact-label {
+      font-size: 0.56rem;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      color: var(--text-muted);
+      margin-bottom: 0.3rem;
+    }
+    .fact .fact-value { font-size: 0.82rem; color: var(--text); line-height: 1.5; }
+    .fact-price .fact-value { color: var(--accent); font-weight: 500; }
+
+    .detail-story {
+      font-size: 0.88rem;
+      line-height: 1.95;
+      color: #b9b2a9;
+      font-weight: 300;
+      margin-bottom: 1.6rem;
+      max-width: 52ch;
+    }
+    .detail-story .story-label {
+      display: block;
+      font-size: 0.56rem;
+      text-transform: uppercase;
+      letter-spacing: 0.22em;
+      color: var(--accent);
+      margin-bottom: 0.7rem;
+      font-family: 'Inter', sans-serif;
+      font-weight: 500;
+    }
+
+    .detail-qr {
+      display: flex;
+      gap: 1.3rem;
+      align-items: center;
+      flex-wrap: wrap;
+      padding-top: 1.4rem;
+      border-top: 1px solid var(--border);
+    }
+    .qr-box { background: #fff; padding: 0.5rem; flex-shrink: 0; }
+    .qr-box img, .qr-box canvas { display: block; }
+    .qr-note { flex: 1; min-width: 180px; font-size: 0.66rem; color: var(--text-muted); line-height: 1.8; letter-spacing: 0.05em; }
+    .qr-note strong { color: var(--text); font-weight: 500; letter-spacing: 0.06em; }
+    .qr-actions { display: flex; gap: 0.6rem; flex-wrap: wrap; margin-top: 0.4rem; }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      border: 1px solid var(--accent);
+      background: transparent;
+      color: var(--accent);
+      font-family: 'Inter', sans-serif;
+      font-size: 0.6rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      padding: 0.65rem 1.2rem;
+      cursor: pointer;
+      transition: all 0.35s ease;
+    }
+    .btn:hover { background: var(--accent); color: var(--bg); }
+    .btn.ghost { border-color: rgba(255,255,255,0.15); color: var(--text-muted); }
+    .btn.ghost:hover { border-color: var(--text); color: var(--text); background: transparent; }
+
+    /* lightbox chrome */
     .lightbox-close {
-      position: absolute;
-      top: 1.5rem;
-      right: 1.8rem;
+      position: fixed;
+      top: 1.2rem;
+      right: 1.4rem;
       background: none;
       border: 1px solid rgba(255,255,255,0.1);
       color: #fff;
@@ -292,37 +447,16 @@
       align-items: center;
       justify-content: center;
       transition: all 0.3s ease;
-      z-index: 2001;
-      letter-spacing: 0;
+      z-index: 2100;
     }
-    .lightbox-close svg {
-      width: 18px;
-      height: 18px;
-      stroke: currentColor;
-      stroke-width: 1.5;
-    }
-    .lightbox-close:hover {
-      border-color: var(--accent);
-      color: var(--accent);
-      transform: rotate(90deg);
-    }
-    .lightbox-caption {
-      position: absolute;
-      bottom: 2rem;
-      left: 50%;
-      transform: translateX(-50%);
-      color: rgba(255,255,255,0.5);
-      font-size: 0.7rem;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      text-align: center;
-      white-space: nowrap;
-    }
+    .lightbox-close svg { width: 18px; height: 18px; stroke: currentColor; stroke-width: 1.5; }
+    .lightbox-close:hover { border-color: var(--accent); color: var(--accent); transform: rotate(90deg); }
+
     .lightbox-nav {
-      position: absolute;
+      position: fixed;
       top: 50%;
       transform: translateY(-50%);
-      background: rgba(255,255,255,0.04);
+      background: rgba(255,255,255,0.05);
       border: 1px solid rgba(255,255,255,0.08);
       color: rgba(255,255,255,0.6);
       width: 50px;
@@ -333,25 +467,134 @@
       cursor: pointer;
       transition: all 0.3s ease;
       border-radius: 50%;
+      z-index: 2100;
     }
-    .lightbox-nav svg {
-      width: 20px;
-      height: 20px;
-      stroke: currentColor;
-      stroke-width: 1.5;
-      fill: none;
-    }
-    .lightbox-nav:hover {
-      background: rgba(255,255,255,0.1);
-      border-color: rgba(255,255,255,0.15);
-      color: #fff;
-    }
-    .lightbox-prev { left: 1.5rem; }
-    .lightbox-next { right: 1.5rem; }
+    .lightbox-nav svg { width: 20px; height: 20px; stroke: currentColor; stroke-width: 1.5; fill: none; }
+    .lightbox-nav:hover { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.15); color: #fff; }
+    .lightbox-prev { left: 1rem; }
+    .lightbox-next { right: 1rem; }
 
-    @media (max-width: 700px) {
+    @media (max-width: 860px) {
+      .lightbox { padding: 0; overflow-y: auto; align-items: flex-start; }
+      .detail-panel { grid-template-columns: 1fr; max-height: none; width: 100%; }
+      .detail-media { min-height: auto; }
+      .detail-media img { max-height: 48vh; }
+      .detail-info { max-height: none; padding: 1.8rem 1.3rem 2rem; }
       .lightbox-nav { display: none; }
-      .lightbox-caption { bottom: 1rem; font-size: 0.6rem; }
+    }
+
+    /* ── Print / Info Card Modal ── */
+    .print-modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 3000;
+      background: rgba(0,0,0,0.9);
+      overflow-y: auto;
+      padding: 2.5vh 1rem 3rem;
+    }
+    .print-modal.open { display: block; animation: fadeIn 0.3s ease; }
+    .print-bar {
+      max-width: 17cm;
+      margin: 0 auto 1.2rem;
+      display: flex;
+      justify-content: flex-end;
+      gap: 0.7rem;
+    }
+    .print-preview-wrap { background: #fff; box-shadow: 0 40px 120px rgba(0,0,0,0.6); }
+
+    .print-card {
+      background: #fff;
+      color: #161614;
+      font-family: Georgia, 'Times New Roman', serif;
+      width: 210mm;
+      min-height: 297mm;
+      padding: 12mm 10mm;
+      margin: 0 auto;
+    }
+    .pc-brand {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 1rem;
+      border-bottom: 1px solid #c9a96e;
+      padding-bottom: 0.5rem;
+      margin-bottom: 0.9rem;
+    }
+    .pc-brand h3 {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #161614;
+      font-size: 1rem;
+    }
+    .pc-brand span { font-size: 0.6rem; letter-spacing: 0.2em; color: #8a857c; }
+    .pc-img {
+      width: 100%;
+      max-height: 9.5cm;
+      object-fit: contain;
+      object-position: center;
+      background: #f3f1ec;
+      margin-bottom: 0.9rem;
+    }
+    .pc-title {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 1.7rem;
+      font-weight: 600;
+      color: #161614;
+    }
+    .pc-artist { font-style: italic; color: #6b665e; margin: 0.15rem 0 0.85rem; font-size: 0.95rem; }
+    .pc-facts {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(115px, 1fr));
+      gap: 0.4rem;
+      margin: 0.85rem 0;
+    }
+    .pc-fact { border-left: 2px solid #c9a96e; padding: 0.12rem 0 0.12rem 0.55rem; }
+    .pc-fact b {
+      display: block;
+      font-size: 0.52rem;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: #8a857c;
+      font-weight: 400;
+      font-family: 'Inter', sans-serif;
+      margin-bottom: 0.1rem;
+    }
+    .pc-fact span { font-size: 0.82rem; color: #161614; }
+    .pc-fact.pc-price span { color: #a07c2e; font-weight: 600; }
+    .pc-story { font-size: 0.76rem; line-height: 1.75; color: #4c4842; margin: 0.8rem 0 1rem; }
+    .pc-qr { display: flex; align-items: center; gap: 1rem; border-top: 1px solid #ddd; padding-top: 0.85rem; }
+    .pc-qr canvas, .pc-qr img { background: #fff; display: block; }
+    .pc-qr p { font-size: 0.6rem; color: #6b665e; line-height: 1.6; }
+    .pc-footer {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.52rem;
+      letter-spacing: 0.14em;
+      color: #a09a90;
+      text-transform: uppercase;
+      margin-top: 0.85rem;
+      text-align: center;
+      border-top: 1px solid #eee;
+      padding-top: 0.55rem;
+    }
+
+    @media print {
+      @page { size: A4; margin: 0; }
+      body { background: #fff; }
+      body * { visibility: hidden; }
+      #printRoot, #printRoot * { visibility: visible; }
+      #printRoot {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 210mm;
+        max-width: none;
+        background: #fff;
+      }
+      .print-card { width: 210mm; min-height: 297mm; padding: 12mm 10mm; box-shadow: none; }
+      .print-preview-wrap { box-shadow: none; }
     }
 
     /* ── Footer ── */
@@ -362,12 +605,7 @@
       max-width: 600px;
       margin: 0 auto;
     }
-    .site-footer .footer-rule {
-      width: 40px;
-      height: 1px;
-      background: var(--accent);
-      margin: 0 auto 2rem;
-    }
+    .site-footer .footer-rule { width: 40px; height: 1px; background: var(--accent); margin: 0 auto 2rem; }
     .site-footer h2 {
       font-family: 'Cormorant Garamond', Georgia, serif;
       font-size: 1.3rem;
@@ -398,15 +636,8 @@
       transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
       margin-bottom: 2.5rem;
     }
-    .site-footer .contact-btn:hover {
-      background: var(--accent);
-      color: var(--bg);
-    }
-    .site-footer .copy {
-      font-size: 0.65rem;
-      color: #444;
-      letter-spacing: 0.08em;
-    }
+    .site-footer .contact-btn:hover { background: var(--accent); color: var(--bg); }
+    .site-footer .copy { font-size: 0.65rem; color: #444; letter-spacing: 0.08em; }
 
     /* ── Scrollbar ── */
     ::-webkit-scrollbar { width: 6px; }
@@ -414,7 +645,6 @@
     ::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
     ::-webkit-scrollbar-thumb:hover { background: #555; }
 
-    /* ── Selection ── */
     ::selection { background: rgba(201, 169, 110, 0.25); color: var(--text); }
   </style>
 </head>
@@ -436,29 +666,67 @@
 
   <main class="gallery" id="gallery"></main>
 
-  <div class="lightbox" id="lightbox">
-    <button class="lightbox-close" id="lightboxClose">
+  <!-- Detail modal -->
+  <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Artwork details">
+    <button class="lightbox-close" id="lightboxClose" aria-label="Close">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
     </button>
-    <button class="lightbox-nav lightbox-prev" id="lightboxPrev">
+    <button class="lightbox-nav lightbox-prev" id="lightboxPrev" aria-label="Previous">
       <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
     </button>
-    <button class="lightbox-nav lightbox-next" id="lightboxNext">
+    <button class="lightbox-nav lightbox-next" id="lightboxNext" aria-label="Next">
       <svg viewBox="0 0 24 24"><polyline points="9 6 15 12 9 18"/></svg>
     </button>
-    <div class="lightbox-inner">
-      <img id="lightboxImg" src="" alt="">
+
+    <div class="detail-panel">
+      <div class="detail-media">
+        <img id="detailImg" src="" alt="">
+      </div>
+      <div class="detail-info">
+        <span class="detail-eyebrow" id="detailEyebrow"></span>
+        <h2 class="detail-title" id="detailTitle"></h2>
+        <p class="detail-artist" id="detailArtist"></p>
+        <div class="detail-rule"></div>
+        <div class="detail-facts">
+          <div class="fact"><span class="fact-label">Type / เทคนิค</span><span class="fact-value" id="factType"></span></div>
+          <div class="fact"><span class="fact-label">Size / ขนาด</span><span class="fact-value" id="factSize"></span></div>
+          <div class="fact"><span class="fact-label">Year / ปี</span><span class="fact-value" id="factYear"></span></div>
+          <div class="fact fact-price"><span class="fact-label">Price / ราคา</span><span class="fact-value" id="factPrice"></span></div>
+        </div>
+        <p class="detail-story"><span class="story-label">เรื่องราวของผลงาน</span><span id="detailStory"></span></p>
+        <div class="detail-qr">
+          <div class="qr-box" id="detailQr"></div>
+          <div class="qr-note">
+            <strong>QR Code การ์ดแสดงผลงาน</strong>
+            <br>สแกนเพื่อเปิดดูรายละเอียดผลงานชิ้นนี้แบบออนไลน์
+            <div class="qr-actions">
+              <button class="btn" id="printCardBtn">Print Info Card</button>
+              <button class="btn ghost" id="copyLinkBtn">Copy Link</button>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="lightbox-caption" id="lightboxCaption"></div>
+  </div>
+
+  <!-- Printable info-card modal -->
+  <div class="print-modal" id="printModal" role="dialog" aria-modal="true" aria-label="Printable info card">
+    <div class="print-bar">
+      <button class="btn" id="doPrintBtn">Print</button>
+      <button class="btn ghost" id="printCloseBtn">Close</button>
+    </div>
+    <div class="print-preview-wrap">
+      <div id="printRoot"></div>
+    </div>
   </div>
 
   <footer class="site-footer">
     <div class="footer-rule"></div>
     <h2>เกี่ยวกับเรา</h2>
     <p class="bio">
-      ภาพวาดเหล่านี้คือผลงานจากจินตนาการและความตั้งใจของผู้ต้องขังในทัณฑสถานบำบัดพิเศษกลาง แดน 9 
-      ผู้ซึ่งใช้เวลาว่างหลังภารกิจบำบัดให้เกิดประโยชน์ โดยการวาดภาพช่วยผ่อนคลายจิตใจ </br>สร้างสมาธิ 
-      และเป็นสื่อกลางแสดงความหวังที่จะกลับคืนสู่สังคม
+      ภาพวาดเหล่านี้คือผลงานจากจินตนาการและความตั้งใจของผู้ต้องขังในทัณฑสถานบำบัดพิเศษกลาง แดน 9
+      ผู้ซึ่งใช้เวลาว่างหลังภารกิจบำบัดให้เกิดประโยชน์ โดยการวาดภาพช่วยผ่อนคลายจิตใจ
+      สร้างสมาธิ และเป็นสื่อกลางแสดงความหวังที่จะกลับคืนสู่สังคม
     </p>
     <a class="contact-btn" href="mailto:pongsinbas@gmail.com?subject=Gallery%20Inquiry">
       Contact for Inquiries
@@ -466,77 +734,233 @@
     <p class="copy">&copy; 2026 ทัณฑสถานบำบัดพิเศษกลาง. All rights reserved.</p>
   </footer>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <script>
-    var images = [
-      { file: "image/color/43.JPG", category: "color", title: "Ganesha IX" },
-      { file: "image/bw/13.jpg", category: "bw", title: "Graphite Study No. 1" },
-      { file: "image/bw/16.jpg", category: "bw", title: "Graphite Study No. 2" },
-      { file: "image/bw/19.jpg", category: "bw", title: "Ink on Paper No. 1" },
-      { file: "image/bw/20.jpg", category: "bw", title: "Ink on Paper No. 2" },
-      { file: "image/bw/31.jpg", category: "bw", title: "Charcoal Portrait" },
-      { file: "image/bw/32.jpg", category: "bw", title: "Pencil Landscape" },
-      { file: "image/bw/5.jpg",  category: "bw", title: "Monochrome Series I" },
-      { file: "image/bw/7.jpg",  category: "bw", title: "Monochrome Series II" },
-      { file: "image/bw/8.jpg",  category: "bw", title: "Shadows & Lines" },
-      { file: "image/bw/9.jpg",  category: "bw", title: "Graphite Tonal Study" },
-      { file: "image/color/1.jpg",  category: "color", title: "Vibrant Horizon" },
-      { file: "image/color/2.jpg",  category: "color", title: "Color Study No. 1" },
-      { file: "image/color/3.jpg",  category: "color", title: "Color Study No. 2" },
-      { file: "image/color/4.jpg",  category: "color", title: "Warm Palettes" },
-      { file: "image/color/6.jpg",  category: "color", title: "Impression I" },
-      { file: "image/color/10.jpg", category: "color", title: "Abstract in Blue" },
-      { file: "image/color/11.jpg", category: "color", title: "Sunlit Meadow" },
-      { file: "image/color/12.jpg", category: "color", title: "Acrylic Series I" },
-      { file: "image/color/14.jpg", category: "color", title: "Acrylic Series II" },
-      { file: "image/color/15.jpg", category: "color", title: "Emerald Tide" },
-      { file: "image/color/17.jpg", category: "color", title: "Oil on Canvas I" },
-      { file: "image/color/18.jpg", category: "color", title: "Oil on Canvas II" },
-      { file: "image/color/21.jpg", category: "color", title: "Watercolor Bloom" },
-      { file: "image/color/22.jpg", category: "color", title: "Pastel Dawn" },
-      { file: "image/color/23.jpg", category: "color", title: "Warm Hues I" },
-      { file: "image/color/24.jpg", category: "color", title: "Warm Hues II" },
-      { file: "image/color/25.jpg", category: "color", title: "Cool Tones I" },
-      { file: "image/color/26.jpg", category: "color", title: "Cool Tones II" },
-      { file: "image/color/27.jpg", category: "color", title: "Vivid Landscape" },
-      { file: "image/color/28.jpg", category: "color", title: "Autumn Palette" },
-      { file: "image/color/29.jpg", category: "color", title: "Field Study I" },
-      { file: "image/color/30.jpg", category: "color", title: "Field Study II" },
-      { file: "image/color/33.jpg", category: "color", title: "Bold Strokes I" },
-      { file: "image/color/34.jpg", category: "color", title: "Bold Strokes II" },
-      { file: "image/color/35.jpg", category: "color", title: "Cityscape I" },
-      { file: "image/color/36.jpg", category: "color", title: "Cityscape II" },
-      { file: "image/color/37.jpg", category: "color", title: "Still Life I" },
-      { file: "image/color/38.jpg", category: "color", title: "Still Life II" },
-      { file: "image/color/39.jpg", category: "color", title: "Still Life III" },
-      { file: "image/color/40.jpg", category: "color", title: "Mixed Media I" },
-      { file: "image/color/41.jpg", category: "color", title: "Mixed Media II" },
-      { file: "image/color/42.jpg", category: "color", title: "Mixed Media III" }
+    var items = [
+      { id: "artwork-01", file: "image/color/43.JPG", category: "color", title: "Ganesha IX", artist: "ศิลปิน แดน 9",
+        type: "สีอะคริลิกบนผ้าใบ (Acrylic on Canvas)", size: "50 × 70 ซม.", price: "39,999 บาท", year: "2026",
+        story: "ได้รับแรงบันดาลใจจากพระพิฆเนศ เทพแห่งปัญญาและศิลปะ ซึ่งเป็นที่เคารพสักการะในวัฒนธรรมไทย ภาพนี้ถูกเก็บรายละเอียดภายใต้แสงไฟในแดน 9 ด้วยความตั้งใจอย่างมาก เพื่อสื่อถึงการเริ่มต้นใหม่ การขจัดอุปสรรค และความหวังที่ศิลปะพาให้ผู้วาดค้นพบตัวเองอีกครั้ง" },
+
+      { id: "artwork-02", file: "image/bw/13.jpg", category: "bw", title: "Graphite Study No. 1", artist: "ศิลปิน แดน 9",
+        type: "กราไฟต์บนกระดาษ (Graphite on Paper)", size: "A3 (30 × 42 ซม.)", price: "3,000 บาท", year: "2025",
+        story: "การศึกษาน้ำหนักแสงและเงาผ่านเส้นกราไฟต์ละเอียด ผู้วาดฝึกฝนสายตาให้หยั่งรู้โครงสร้างของรูปทรงและการไล่โทนเสียงของพื้นผิว ภาพนี้คือบทเรียนแห่งความอดทนที่ค่อย ๆ ทอขึ้นทีละเส้น" },
+
+      { id: "artwork-03", file: "image/bw/16.jpg", category: "bw", title: "Graphite Study No. 2", artist: "ศิลปิน แดน 9",
+        type: "กราไฟต์บนกระดาษ (Graphite on Paper)", size: "A3 (30 × 42 ซม.)", price: "3,000 บาท", year: "2025",
+        story: "ภาพศึกษาต่อจากชุดแรก เน้นการสร้างมิติจากแสงธรรมชาติที่ส่องผ่านกรอบหน้าต่างเล็ก ๆ ของห้อง เพื่อบอกเล่าถึงความเงียบสงบและเวลาที่ไหลเอื่อยในแต่ละวัน" },
+
+      { id: "artwork-04", file: "image/bw/19.jpg", category: "bw", title: "Ink on Paper No. 1", artist: "ศิลปิน แดน 9",
+        type: "หมึกบนกระดาษ (Ink on Paper)", size: "A4 (21 × 30 ซม.)", price: "2,600 บาท", year: "2025",
+        story: "ผลงานหมึกเส้นอิสระที่ถูกวาดในลมหายใจเดียว ความไม่แน่นอนของเส้นน้ำหมึกสะท้อนถึงความกลัวและความกล้าที่ต้องเผชิญหน้า เพื่อค้นพบความหมายใหม่ของการให้อภัยตนเอง" },
+
+      { id: "artwork-05", file: "image/bw/20.jpg", category: "bw", title: "Ink on Paper No. 2", artist: "ศิลปิน แดน 9",
+        type: "หมึกบนกระดาษ (Ink on Paper)", size: "A4 (21 × 30 ซม.)", price: "3,999 บาท", year: "2025",
+        story: "เส้นหมึกที่ทับซ้อนกันกลายเป็นภูมิทัศน์เชิงนามธรรมของความคิด ผู้วาดต้องการแสดงให้เห็นว่าแม้ความมืดมนก็งดงามได้เสมอเมื่อจัดวางอย่างมีจังหวะ" },
+
+      { id: "artwork-06", file: "image/bw/31.jpg", category: "bw", title: "Charcoal Portrait", artist: "ศิลปิน แดน 9",
+        type: "ถ่านชาร์โคลบนกระดาษ (Charcoal on Paper)", size: "A3 (30 × 42 ซม.)", price: "5,000 บาท", year: "2025",
+        story: "ภาพเหมือนที่วาดจากความทรงจำของครอบครัว นัยน์ตาที่เต็มไปด้วยความปรารถนาและความเสียใจถูกถ่ายทอดผ่านเฉดสีเทาอ่อนเข้ม เพื่อระลึกว่าทุกคนมีเวลาให้แก้ไขความผิดพลาดได้เสมอ" },
+
+      { id: "artwork-07", file: "image/bw/32.jpg", category: "bw", title: "Pencil Landscape", artist: "ศิลปิน แดน 9",
+        type: "ดินสอกราไฟต์บนกระดาษ (Graphite Pencil on Paper)", size: "A3 (30 × 42 ซม.)", price: "2,600 บาท", year: "2025",
+        story: "ทิวทัศน์ชนบทบ้านเกิดที่ถูกทอขึ้นจากความทรงจำ ต้นไม้ ท้องนา และสายลมที่พัดผ่าน กลายเป็นพื้นที่ปลอดภัยในใจที่ผู้วาดสามารถย้อนกลับไปเดินเล่นได้ทุกครั้งที่รู้สึกเดียวดาย" },
+
+      { id: "artwork-08", file: "image/bw/5.jpg", category: "bw", title: "Monochrome Series I", artist: "ศิลปิน แดน 9",
+        type: "หมึกและถ่านบนกระดาษ (Ink & Charcoal)", size: "A3 (30 × 42 ซม.)", price: "2,600 บาท", year: "2025",
+        story: "ชุดงานขาวดำที่สำรวจความสัมพันธ์ระหว่างความเงียบกับเสียง ผ่านพื้นผิวที่ถูกขูด ขีด และเกลี่ยซ้ำแล้วซ้ำเล่า จนเกิดเป็นบทสนทนาทางภาพที่ไม่ต้องใช้คำพูด" },
+
+      { id: "artwork-09", file: "image/bw/7.jpg", category: "bw", title: "Monochrome Series II", artist: "ศิลปิน แดน 9",
+        type: "หมึกและถ่านบนกระดาษ (Ink & Charcoal)", size: "A3 (30 × 42 ซม.)", price: "2,000 บาท", year: "2025",
+        story: "ภาคต่อของการค้นหาสมดุลในโลกขาวดำ เปรียบเสมือนชีวิตที่ต้องเลือกระหว่างความสว่างและเงามืด แล้วเรียนรู้ที่จะอยู่ร่วมกับทั้งสองอย่างได้อย่างสงบ" },
+
+      { id: "artwork-10", file: "image/bw/8.jpg", category: "bw", title: "Shadows & Lines", artist: "ศิลปิน แดน 9",
+        type: "ถ่านชาร์โคลและหมึกบนกระดาษ (Charcoal & Ink)", size: "A3 (30 × 42 ซม.)", price: "2,000 บาท", year: "2025",
+        story: "เส้นตรงคือขอบเขต เงาคือสิ่งที่อยู่เลยขอบเขตไป ผู้วาดตั้งใจเล่นกับสองสิ่งนี้เพื่อบอกเล่าถึงกำแพงที่มองไม่เห็นภายในใจ และความปรารถนาที่จะข้ามผ่านมันไปให้ได้" },
+
+      { id: "artwork-11", file: "image/bw/9.jpg", category: "bw", title: "Graphite Tonal Study", artist: "ศิลปิน แดน 9",
+        type: "กราไฟต์บนกระดาษ (Graphite on Paper)", size: "A3 (30 × 42 ซม.)", price: "3,000 บาท", year: "2025",
+        story: "ท่ามกลางสายน้ำที่ไม่เคยหยุดนิ่ง พระพุทธองค์ยังคงนิ่งสงบ เพราะเมื่อจิตพบธรรม แม้พญานาคแห่งความกลัวก็กลายเป็นผู้พิทักษ์" },
+
+      { id: "artwork-12", file: "image/color/1.jpg", category: "color", title: "Vibrant Horizon", artist: "ศิลปิน แดน 9",
+        type: "สีอะคริลิกบนผ้าใบ (Acrylic on Canvas)", size: "60 × 90 ซม.", price: "9,500 บาท", year: "2026",
+        story: "หลวงปู่ศิลา ไม่เพียงเพื่อถ่ายทอดรูปลักษณ์ของพระสงฆ์รูปหนึ่ง แต่ต้องการบันทึก ความสงบและศรัทธาที่อยู่ภายในตัวท่าน ผ่านใบหน้าที่ผ่านกาลเวลา รอยย่น และแววตาที่นิ่งสงบ ลูกประคำที่ทอดยาวลงมาจากลำคอเปรียบเสมือน เส้นทางแห่งการภาวนา — เม็ดหนึ่งแทนแต่ละลมหายใจ แต่ละช่วงเวลาของชีวิต และแต่ละบทเรียนที่ผ่านเข้ามา แม้ร่างกายจะชราภาพ แต่ท่าทางของท่านกลับเต็มไปด้วยความมั่นคง ภาพนี้จึงเหมือนคำเตือนจากศิลปินว่า ความงดงามที่แท้จริงไม่ได้อยู่ที่วัยหรือรูปลักษณ์ แต่อยู่ที่จิตใจที่สงบและความดีที่เราทิ้งไว้ให้ผู้อื่น" },
+
+      { id: "artwork-13", file: "image/color/2.jpg", category: "color", title: "Color Study No. 1", artist: "ศิลปิน แดน 9",
+        type: "สีน้ำมันบนผ้าใบ (Oil on Canvas)", size: "40 × 50 ซม.", price: "6,500 บาท", year: "2025",
+        story: "การทดลองผสมสีแบบเรียนจากตำราภายใต้แสงสลัว ศึกษาว่าสีแต่ละสีส่งเสียงกับอีกสีหนึ่งอย่างไร ก่อนจะค้นพบว่าความงามของตัวเขาเองก็อยู่ในเฉดสีที่ไม่มีใครเหมือนเช่นกัน" },
+
+      { id: "artwork-14", file: "image/color/3.jpg", category: "color", title: "Color Study No. 2", artist: "ศิลปิน แดน 9",
+        type: "สีน้ำมันบนผ้าใบ (Oil on Canvas)", size: "40 × 50 ซม.", price: "6,500 บาท", year: "2025",
+        story: "ภาพศึกษาชุดที่สองที่เพียรไล่สีจนได้จังหวะที่ลงตัว สะท้อนแนวคิดว่าความผิดพลาดของแปรงเพียงครั้งเดียว ก็สามารถพลิกผันให้กลายเป็นจุดเริ่มต้นของสิ่งที่สวยกว่าเดิมได้" },
+
+      { id: "artwork-15", file: "image/color/4.jpg", category: "color", title: "Warm Palettes", artist: "ศิลปิน แดน 9",
+        type: "สีอะคริลิกบนผ้าใบ (Acrylic on Canvas)", size: "50 × 70 ซม.", price: "7,800 บาท", year: "2026",
+        story: "จานสีอุ่นของแสงเทียนและบ้านที่อบอุ่น ความทรงจำวันปีใหม่ของครอบครัวถูกถ่ายทอดด้วยโทนแดง ส้ม และน้ำตาล เพื่อย้ำเตือนว่า 'บ้าน' ไม่ได้อยู่ที่สถานที่ แต่อยู่ที่คนที่รอคอย" },
+
+      { id: "artwork-16", file: "image/color/6.jpg", category: "color", title: "Impression I", artist: "ศิลปิน แดน 9",
+        type: "สีน้ำมันบนผ้าใบ (Oil on Canvas)", size: "60 × 80 ซม.", price: "9,900 บาท", year: "2026",
+        story: "ความประทับใจแรกที่ได้เห็นดอกไม้บานกลางที่โล่งหลังฝนตก ภาพนี้เก็บความระลอกของอากาศ ความชื้น และแสงที่ยังชุ่มฉ่ำไว้ในทุกฝีแปรงอันอิสระ" },
+
+      { id: "artwork-17", file: "image/color/10.jpg", category: "color", title: "Abstract in Blue", artist: "ศิลปิน แดน 9",
+        type: "สีอะคริลิกบนผ้าใบ (Acrylic on Canvas)", size: "50 × 60 ซม.", price: "7,500 บาท", year: "2026",
+        story: "ความครุ่นคิดภายในที่ถูกแปลเป็นรูปทรงลื่นไหลในโทนน้ำเงิน ยามค่ำคืนที่เงียบงัน ผู้วาดปล่อยให้แปรงเต้นรำไปกับเสียงลมหายใจของตนเอง แล้วเจอความสงบในพื้นที่ที่ไร้คำนิยาม" },
+
+      { id: "artwork-18", file: "image/color/11.jpg", category: "color", title: "Sunlit Meadow", artist: "ศิลปิน แดน 9",
+        type: "สีน้ำมันบนผ้าใบ (Oil on Canvas)", size: "60 × 80 ซม.", price: "9,500 บาท", year: "2026",
+        story: "ทุ่งหญ้าที่อาบไปด้วยแสงยามบ่าย จากความทรงจำการวิ่งเล่นในวัยเยาว์ก่อนที่จะเขวอะเขวี้ยงจากเส้นทาง ผู้วาดอยากให้ผู้ชมได้หายใจเข้าลึก ๆ กับทุ่งสีเขียวผืนนั้นด้วย" },
+
+      { id: "artwork-19", file: "image/color/12.jpg", category: "color", title: "Acrylic Series I", artist: "ศิลปิน แดน 9",
+        type: "สีอะคริลิกบนผ้าใบ (Acrylic on Canvas)", size: "40 × 50 ซม.", price: "6,000 บาท", year: "2025",
+        story: "ชุดผลงานอะคริลิกชิ้นแรกที่ผู้วาดรู้สึกภาคภูมิใจ เพราะเป็นครั้งแรกที่กล้าใช้สีโดยไม่กลัวจะผิด ภาพนี้คือจุดเริ่มต้นของการกล้าเป็นตัวเองอีกครั้ง" },
+
+      { id: "artwork-20", file: "image/color/14.jpg", category: "color", title: "Acrylic Series II", artist: "ศิลปิน แดน 9",
+        type: "สีอะคริลิกบนผ้าใบ (Acrylic on Canvas)", size: "40 × 50 ซม.", price: "6,000 บาท", year: "2025",
+        story: "ภาคต่อของการค้นหาจังหวะและน้ำหนักของสี เรียนรู้ว่าความสำเร็จไม่ได้เกิดจากปาฏิหาริย์ หากแต่เกิดจากการเริ่มต้นใหม่ซ้ำ ๆ อย่างไม่ย่อท้อ" },
+
+      { id: "artwork-21", file: "image/color/15.jpg", category: "color", title: "Emerald Tide", artist: "ศิลปิน แดน 9",
+        type: "สีน้ำมันบนผ้าใบ (Oil on Canvas)", size: "50 × 70 ซม.", price: "8,000 บาท", year: "2026",
+        story: "สายน้ำสีมรกตที่ผลักคลื่นเข้าหาฝั่งไม่รู้จบ ผู้วาดเคยนั่งมองทะเลในสารคดีทีวีเก่าในห้องนั่งรวม แล้วจินตนาการว่ามันคือเสียงอิสระที่คอยเรียกหาเขาให้พยายามต่อไป" },
+
+      { id: "artwork-22", file: "image/color/17.jpg", category: "color", title: "Oil on Canvas I", artist: "ศิลปิน แดน 9",
+        type: "สีน้ำมันบนผ้าใบ (Oil on Canvas)", size: "60 × 90 ซม.", price: "3,000 บาท", year: "2026",
+        story: "ผลงานชิ้นใหญ่ชิ้นแรกที่ผู้วาดทุ่มเทเวลาเกือบสองเดือน เป็นเรื่องราวของการเดินทางจากความมืดสู่แสงสว่าง โดยใช้ภาพเรือกลางมหาสมุทรเป็นสัญลักษณ์ของความหวังที่ยังแล่นต่อไป" },
+
+      { id: "artwork-23", file: "image/color/18.jpg", category: "color", title: "Oil on Canvas II", artist: "ศิลปิน แดน 9",
+        type: "สีน้ำมันบนผ้าใบ (Oil on Canvas)", size: "60 × 90 ซม.", price: "5,400 บาท", year: "2026",
+        story: "ชิ้นต่อจาก 'OIL ON CANVAS I' เป็นภาพยามเช้าที่เรือถึงฝั่ง ผู้วาดกล่าวว่าภาพนี้คือคำสัญญาที่ให้ไว้กับแม่ว่า เมื่อออกไป เขาจะใช้ชีวิตเหมือนหน้าใหม่ของผ้าใบที่ปราศจากรอยขีดฆ่า" },
+
+      { id: "artwork-24", file: "image/color/21.jpg", category: "color", title: "Watercolor Bloom", artist: "ศิลปิน แดน 9",
+        type: "สีน้ำบนกระดาษ (Watercolor on Paper)", size: "A3 (30 × 42 ซม.)", price: "3,500 บาท", year: "2026",
+        story: "ดอกไม้ที่เบ่งบานด้วยหมึกสีน้ำโปร่งใส สื่อถึงความนุ่มนวลและความอ่อนโยนที่ผู้วาดเก็บซ่อนไว้ภายใน ภาพนี้ถูกวาดในตอนเช้าตรู่ซึ่งเป็นเวลาที่เขารู้สึกใกล้ชิดกับตัวเองมากที่สุด" },
+
+      { id: "artwork-25", file: "image/color/22.jpg", category: "color", title: "Pastel Dawn", artist: "ศิลปิน แดน 9",
+        type: "สีพาสเทลบนกระดาษ (Pastel on Paper)", size: "A3 (30 × 42 ซม.)", price: "3,200 บาท", year: "2025",
+        story: "รุ่งอรุณที่ทาบด้วยสีพาสเทลอ่อนหวาน สีของวันใหม่ที่สัญญาว่าจะตั้งใจทำสิ่งดี ๆ มากขึ้นเรื่อย ๆ เพราะผู้วาดเชื่อว่าทุกเช้าคือโอกาสที่พระเจ้าหยิบยื่นให้เริ่มต้น" },
+
+      { id: "artwork-26", file: "image/color/23.jpg", category: "color", title: "Warm Hues I", artist: "ศิลปิน แดน 9",
+        type: "สีอะคริลิกบนผ้าใบ (Acrylic on Canvas)", size: "40 × 50 ซม.", price: "6,200 บาท", year: "2025",
+        story: "โทนอุ่นของความทรงจำในวันที่แม่ทำอาหารให้ ทั้งกลิ่นหอม เสียงเรียก และรอยยิ้ม ถูกเก็บไว้ในภาพนี้เพื่อเป็นเครื่องยึดเหนี่ยวในวันที่ความคิดถึงท่วมท้น" },
+
+      { id: "artwork-27", file: "image/color/24.jpg", category: "color", title: "Warm Hues II", artist: "ศิลปิน แดน 9",
+        type: "สีอะคริลิกบนผ้าใบ (Acrylic on Canvas)", size: "40 × 50 ซม.", price: "6,200 บาท", year: "2025",
+        story: "โทนอุ่นในอิริยาบถที่ต่างออกไป ภาพนี้ถูกวาดในยามที่ผู้วาดคิดถึงการได้กอดคนในครอบครัวอีกครั้ง และใช้สีเหลืองอุ่นแทนความอบอุ่นที่รออยู่" },
+
+      { id: "artwork-28", file: "image/color/25.jpg", category: "color", title: "Cool Tones I", artist: "ศิลปิน แดน 9",
+        type: "สีอะคริลิกบนผ้าใบ (Acrylic on Canvas)", size: "40 × 50 ซม.", price: "6,200 บาท", year: "2025",
+        story: "การสำรวจความสงบผ่านโทนเย็น สีน้ำเงินและเขียวช่วยกล่อมจิตใจที่ว้าวุ่นให้ค่อย ๆ สงบลงเหมือนน้ำในลำธารที่ไหลเอื่อยหลังพายุฝนผ่านไป" },
+
+      { id: "artwork-29", file: "image/color/26.jpg", category: "color", title: "Cool Tones II", artist: "ศิลปิน แดน 9",
+        type: "สีอะคริลิกบนผ้าใบ (Acrylic on Canvas)", size: "40 × 50 ซม.", price: "6,200 บาท", year: "2025",
+        story: "ภาพสะท้อนของค่ำคืนที่เย็นฉ่ำ ใต้แสงจันทร์อันเงียบเหงา ผู้วาดค้นพบว่าความเหงาสามารถเติบโตเป็นศิลปะได้ หากเรารู้จักเปลี่ยนมันให้เป็นฝีแปรงที่สื่อสารกับหัวใจของผู้อื่น" },
+
+      { id: "artwork-30", file: "image/color/27.jpg", category: "color", title: "Vivid Landscape", artist: "ศิลปิน แดน 9",
+        type: "สีอะคริลิกบนผ้าใบ (Acrylic on Canvas)", size: "50 × 70 ซม.", price: "7,900 บาท", year: "2026",
+        story: "ภูมิทัศน์สีจัดจ้านที่บีบอัดความทรงจำของหมู่บ้านและขุนเขาบ้านเกิดเอาไว้ในกรอบเดียว เพื่อยืนยันความจริงที่ว่า 'ที่ไหนก็ไม่เหมือนบ้าน' กับผู้วาดคนหนึ่ง" },
+
+      { id: "artwork-31", file: "image/color/28.jpg", category: "color", title: "Autumn Palette", artist: "ศิลปิน แดน 9",
+        type: "สีน้ำมันบนผ้าใบ (Oil on Canvas)", size: "55 × 75 ซม.", price: "8,800 บาท", year: "2026",
+        story: "จานสีของฤดูใบไม้ร่วงที่ผู้วาดเคยเห็นจากภาพหนังสือเก่า ใบเหืองแดงที่ร่วงหล่นคือบทเรียนของธรรมชาติเรื่องการปล่อยวาง เพื่อเตรียมพื้นที่ให้สิ่งใหม่งอกงามขึ้น" },
+
+      { id: "artwork-32", file: "image/color/29.jpg", category: "color", title: "Field Study I", artist: "ศิลปิน แดน 9",
+        type: "สีอะคริลิกบนผ้าใบ (Acrylic on Canvas)", size: "40 × 50 ซม.", price: "5,800 บาท", year: "2025",
+        story: "การฝึกวาดภาพนอกสถานที่ในจินตนาการ ผู้วาดหลับตาแล้วนึกถึงทุ่งนาหน้าบ้าน ช่วงเวลาเหล่านั้นทำให้เขารับรู้ว่าเสรีภาพเริ่มต้นจากภายในของความคิดเสมอ" },
+
+      { id: "artwork-33", file: "image/color/30.jpg", category: "color", title: "Field Study II", artist: "ศิลปิน แดน 9",
+        type: "สีอะคริลิกบนผ้าใบ (Acrylic on Canvas)", size: "40 × 50 ซม.", price: "5,800 บาท", year: "2025",
+        story: "ภาคต่อของการเดินทางในจินตนาการ ข้ามทุ่ง ผ่านลำธาร ไปจนถึงหมู่บ้านปลายทาง สะท้อนความเชื่อว่าถ้าใจยังมีแผนที่เพื่อนฝัน ก็ไม่มีกำแพงใดขวางกั้นได้จริง" },
+
+      { id: "artwork-34", file: "image/color/33.jpg", category: "color", title: "Bold Strokes I", artist: "ศิลปิน แดน 9",
+        type: "สีอะคริลิกปาดมีด (Acrylic with Palette Knife)", size: "50 × 50 ซม.", price: "4,200 บาท", year: "2026",
+        story: "ฝีแปะที่หนักแน่นและเป็นชนวน ภาพนี้คือการปลดปล่อยอารมณ์ที่อัดแน่นมานานออกมาเป็นชั้นสีหนา ๆ เพื่อบอกทุกคนว่าแม้คนที่เคยพลาดก็ยังมีพลังสร้างความงามได้" },
+
+      { id: "artwork-35", file: "image/color/34.jpg", category: "color", title: "Bold Strokes II", artist: "ศิลปิน แดน 9",
+        type: "สีอะคริลิกปาดมีด (Acrylic with Palette Knife)", size: "50 × 70 ซม.", price: "8,200 บาท", year: "2026",
+        story: "ผลงานคู่หูที่ท้าทายจังหวะของตัวเองด้วยการวาดซ้ายมือเพื่อฝึกให้ใจยอมรับความไม่สมบูรณ์ พบว่าความกล้าหาญเกิดจากการยอมก้าวออกจากความเคยชิน" },
+
+      { id: "artwork-36", file: "image/color/35.jpg", category: "color", title: "Cityscape I", artist: "ศิลปิน แดน 9",
+        type: "สีอะคริลิกบนผ้าใบ (Acrylic on Canvas)", size: "40 × 60 ซม.", price: "6,800 บาท", year: "2026",
+        story: "ภาพเมืองยามค่ำคืนจากความทรงจำของผู้วาดที่เคยอาศัยอยู่ในเมืองใหญ่ ตึกไฟระยิบระยับคือชีวิตอีกหลายล้านดวงที่กำลังวิ่งแข่งกับเวลา แต่เขาก็เรียนรู้จะพักสายตากับแสงไฟดวงหนึ่งที่รอเขาอยู่" },
+
+      { id: "artwork-37", file: "image/color/36.jpg", category: "color", title: "Cityscape II", artist: "ศิลปิน แดน 9",
+        type: "สีอะคริลิกบนผ้าใบ (Acrylic on Canvas)", size: "40 × 60 ซม.", price: "6,800 บาท", year: "2026",
+        story: "เมืองในสายหมอกยามเช้า ภาพนี้วาดจากความรู้สึกเคว้งของหนุ่มจากต่างจังหวัดที่ย้ายเข้ามาใช้ชีวิตในเมือง และพบว่าความมั่นใจค่อย ๆ ถูกสร้างขึ้นทีละก้าวเหมือนตึกที่ถูกขึ้นโครงทีละชั้น" },
+
+      { id: "artwork-38", file: "image/color/37.jpg", category: "color", title: "Still Life I", artist: "ศิลปิน แดน 9",
+        type: "สีน้ำมันบนผ้าใบ (Oil on Canvas)", size: "35 × 45 ซม.", price: "5,200 บาท", year: "2025",
+        story: "หุ่นนิ่งผลไม้ใต้แสงเทียนตำราเรียน ทำความเข้าใจเรื่องแสงและพื้นผิวผ่านสิ่งที่เรียบง่ายที่สุด และค้นพบว่าความงามแฝงอยู่ในของธรรมดาเสมอ ถ้าใจเราเงียบพอจะสังเกต" },
+
+      { id: "artwork-39", file: "image/color/38.jpg", category: "color", title: "Still Life II", artist: "ศิลปิน แดน 9",
+        type: "สีน้ำมันบนผ้าใบ (Oil on Canvas)", size: "35 × 45 ซม.", price: "5,200 บาท", year: "2025",
+        story: "เหยือกน้ำและผ้าลินินยับย่นคือบทเรียนเรื่องความสมดุล ผู้วาดเปรียบเทียบรอยยับบนผ้ากับร่องรอยชีวิตที่ทุกคนมี และยอมรับว่ามันคือส่วนหนึ่งของความงามทั้งหมด" },
+
+      { id: "artwork-40", file: "image/color/39.jpg", category: "color", title: "Still Life III", artist: "ศิลปิน แดน 9",
+        type: "สีน้ำมันบนผ้าใบ (Oil on Canvas)", size: "35 × 45 ซม.", price: "5,200 บาท", year: "2025",
+        story: "หุ่นนิ่งชุดที่สามกับมุมมองใหม่ เพื่อย้ำเตือนตนเองว่าการมองปัญหาจากมุมเดิมจะวนเวียนไม่จบ แต่การเปลี่ยนมุมเพียงเล็กน้อยก็เปิดทางออกที่คาดไม่ถึง" },
+
+      { id: "artwork-41", file: "image/color/40.jpg", category: "color", title: "Mixed Media I", artist: "ศิลปิน แดน 9",
+        type: "เทคนิคผสมบนกระดาษ (Mixed Media on Paper)", size: "(50 × 50 ซม.)", price: "4,500 บาท", year: "2026",
+        story: "ทดลองรวมถ่าน หมึก สีน้ำ และเศษกระดาษมาเกยทับกัน เป็นบทสนทนาระหว่างเทคนิคที่ต่างขั้ว เหมือนชีวิตที่ผสมผสานทั้งรอยแผลและยอดฝันไว้ในคนเดียวกัน" },
+
+      { id: "artwork-42", file: "image/color/41.jpg", category: "color", title: "Mixed Media II", artist: "ศิลปิน แดน 9",
+        type: "เทคนิคผสมบนกระดาษ (Mixed Media on Paper)", size: "(50 × 50 ซม.)", price: "4,500 บาท", year: "2026",
+        story: "การซ้อนทับชั้นของวัสดุต่างชนิดสะท้อนชั้นของความรู้สึกที่ถูกรักต่อกัน วันหนึ่งผู้วาดพบว่าความทรงจำทั้งดีและร้ายหลอมรวมเป็นตัวตนใหม่ที่ยืนหยัดได้อย่างมั่นคง" },
+
+      { id: "artwork-43", file: "image/color/42.jpg", category: "color", title: "Mixed Media III", artist: "ศิลปิน แดน 9",
+        type: "เทคนิคผสมบนกระดาษ (Mixed Media on Paper)", size: "(50 × 50 ซม.)", price: "4,500 บาท", year: "2026",
+        story: "ผลงานชุดสุดท้ายที่ผู้วาดรู้สึกว่ากล้าทุ่มเทที่สุด เพราะเป็นการรวมทุกอย่างที่เรียนมาไว้ในชิ้นเดียว เปรียบเสมือนบทสรุปว่าเขาพร้อมออกไปเล่าเรื่องใหม่ให้โลกฟังอย่างมีศักดิ์ศรี" }
     ];
 
     var gallery = document.getElementById('gallery');
     var lightbox = document.getElementById('lightbox');
-    var lightboxImg = document.getElementById('lightboxImg');
-    var lightboxCaption = document.getElementById('lightboxCaption');
+    var detailImg = document.getElementById('detailImg');
+    var detailEyebrow = document.getElementById('detailEyebrow');
+    var detailTitle = document.getElementById('detailTitle');
+    var detailArtist = document.getElementById('detailArtist');
+    var factType = document.getElementById('factType');
+    var factSize = document.getElementById('factSize');
+    var factYear = document.getElementById('factYear');
+    var factPrice = document.getElementById('factPrice');
+    var detailStory = document.getElementById('detailStory');
+    var detailQr = document.getElementById('detailQr');
+
+    var printModal = document.getElementById('printModal');
+    var printRoot = document.getElementById('printRoot');
+
     var navCount = document.getElementById('navCount');
     var navButtons = document.querySelectorAll('.nav-bar button');
     var currentFilter = 'all';
-    var visibleImages = [];
+    var visibleItems = [];
     var currentIndex = 0;
+
+    function pageUrl() {
+      return location.href.split('#')[0];
+    }
+    function artworkUrl(item) {
+      return pageUrl() + '#' + item.id;
+    }
+    function makeQr(el, url, size) {
+      el.innerHTML = '';
+      new QRCode(el, { text: url, width: size, height: size, colorDark: '#161510', colorLight: '#ffffff' });
+    }
 
     function renderGallery(filter) {
       currentFilter = filter;
       gallery.innerHTML = '';
-      visibleImages = filter === 'all'
-        ? images.slice()
-        : images.filter(function(img) { return img.category === filter; });
+      visibleItems = filter === 'all'
+        ? items.slice()
+        : items.filter(function(it) { return it.category === filter; });
 
-      navCount.textContent = visibleImages.length + ' work' + (visibleImages.length !== 1 ? 's' : '');
+      navCount.textContent = visibleItems.length + ' work' + (visibleItems.length !== 1 ? 's' : '');
 
-      visibleImages.forEach(function(item, index) {
+      visibleItems.forEach(function(item, index) {
         var div = document.createElement('div');
         div.className = 'gallery-item';
         div.style.animationDelay = (index * 0.04) + 's';
-        div.innerHTML =
+        div.dataset.artId = item.id;
+
+        var thumb = document.createElement('div');
+        thumb.className = 'thumb';
+        thumb.innerHTML =
           '<img src="' + item.file + '" alt="' + item.title + '" loading="lazy">' +
           '<div class="overlay">' +
             '<span class="title">' + item.title + '</span>' +
@@ -545,7 +969,28 @@
               '<span class="category-tag">' + (item.category === 'bw' ? 'Black & White' : 'Color') + '</span>' +
             '</div>' +
           '</div>';
-        div.addEventListener('click', function() { openLightbox(index); });
+        thumb.addEventListener('click', function() { openModal(index); });
+
+        var meta = document.createElement('div');
+        meta.className = 'card-meta';
+        meta.innerHTML =
+          '<div>' +
+            '<span class="card-title">' + item.title + '</span>' +
+            '<span class="cat-tag">' + (item.category === 'bw' ? 'Black & White' : 'Color') + '</span>' +
+          '</div>' +
+          '<div class="card-right">' +
+            '<span class="card-price">' + item.price + '</span>' +
+            '<button class="card-qr-btn" aria-label="View QR card for ' + item.title + '">QR</button>' +
+          '</div>';
+
+        var qrBtn = meta.querySelector('.card-qr-btn');
+        qrBtn.addEventListener('click', function(e) {
+          e.stopPropagation();
+          openPrintCard(item);
+        });
+
+        div.appendChild(thumb);
+        div.appendChild(meta);
         gallery.appendChild(div);
       });
     }
@@ -558,58 +1003,177 @@
       });
     });
 
-    function openLightbox(index) {
+    /* ── Detail modal ── */
+    function openModal(index) {
       currentIndex = index;
-      updateLightbox();
+      updateDetail();
       lightbox.classList.add('open');
       document.body.style.overflow = 'hidden';
+      history.replaceState(null, '', '#' + visibleItems[index].id);
     }
 
-    function closeLightbox() {
+    function closeModal() {
       lightbox.classList.remove('open');
       document.body.style.overflow = '';
+      history.replaceState(null, '', pageUrl());
     }
 
-    function updateLightbox() {
-      var item = visibleImages[currentIndex];
-      lightboxImg.src = item.file;
-      lightboxImg.alt = item.title;
-      lightboxCaption.textContent = item.title + '  \u2014  ' + (currentIndex + 1) + ' / ' + visibleImages.length;
+    function updateDetail() {
+      var item = visibleItems[currentIndex];
+      detailImg.src = item.file;
+      detailImg.alt = item.title;
+      detailEyebrow.textContent = (item.category === 'bw' ? 'Black & White' : 'Color') +
+        '  \u00b7  ' + (currentIndex + 1) + ' / ' + visibleItems.length;
+      detailTitle.textContent = item.title;
+      detailArtist.textContent = item.artist;
+      factType.textContent = item.type;
+      factSize.textContent = item.size;
+      factYear.textContent = item.year;
+      factPrice.textContent = item.price;
+      detailStory.textContent = item.story;
+      makeQr(detailQr, artworkUrl(item), 128);
     }
 
     function prevImage() {
-      currentIndex = (currentIndex - 1 + visibleImages.length) % visibleImages.length;
-      updateLightbox();
+      currentIndex = (currentIndex - 1 + visibleItems.length) % visibleItems.length;
+      updateDetail();
+      history.replaceState(null, '', '#' + visibleItems[currentIndex].id);
     }
-
     function nextImage() {
-      currentIndex = (currentIndex + 1) % visibleImages.length;
-      updateLightbox();
+      currentIndex = (currentIndex + 1) % visibleItems.length;
+      updateDetail();
+      history.replaceState(null, '', '#' + visibleItems[currentIndex].id);
     }
 
-    document.getElementById('lightboxClose').addEventListener('click', closeLightbox);
+    document.getElementById('lightboxClose').addEventListener('click', closeModal);
     document.getElementById('lightboxPrev').addEventListener('click', prevImage);
     document.getElementById('lightboxNext').addEventListener('click', nextImage);
 
     lightbox.addEventListener('click', function(e) {
-      if (e.target === lightbox || e.target.classList.contains('lightbox-inner')) closeLightbox();
+      if (e.target === lightbox) closeModal();
     });
 
     document.addEventListener('keydown', function(e) {
-      if (!lightbox.classList.contains('open')) return;
-      if (e.key === 'Escape') closeLightbox();
-      if (e.key === 'ArrowLeft') prevImage();
-      if (e.key === 'ArrowRight') nextImage();
+      var anyOpen = lightbox.classList.contains('open') || printModal.classList.contains('open');
+      if (!anyOpen) return;
+      if (e.key === 'Escape') {
+        if (printModal.classList.contains('open')) closePrintCard();
+        if (lightbox.classList.contains('open')) closeModal();
+      }
+      if (lightbox.classList.contains('open') && !printModal.classList.contains('open')) {
+        if (e.key === 'ArrowLeft') prevImage();
+        if (e.key === 'ArrowRight') nextImage();
+      }
     });
 
     var touchStartX = 0;
-    lightbox.addEventListener('touchstart', function(e) { touchStartX = e.changedTouches[0].screenX; }, { passive: true });
+    lightbox.addEventListener('touchstart', function(e) {
+      touchStartX = e.changedTouches[0].screenX;
+    }, { passive: true });
     lightbox.addEventListener('touchend', function(e) {
       var diff = touchStartX - e.changedTouches[0].screenX;
       if (Math.abs(diff) > 60) { diff > 0 ? nextImage() : prevImage(); }
     }, { passive: true });
 
+    document.getElementById('copyLinkBtn').addEventListener('click', function() {
+      var item = visibleItems[currentIndex];
+      var input = document.createElement('input');
+      input.value = artworkUrl(item);
+      document.body.appendChild(input);
+      input.select();
+      try { document.execCommand('copy'); } catch (err) {}
+      document.body.removeChild(input);
+      var btn = document.getElementById('copyLinkBtn');
+      var before = btn.textContent;
+      btn.textContent = 'Copied!';
+      setTimeout(function() { btn.textContent = before; }, 1600);
+    });
+
+    /* ── Printable info card ── */
+    function cardHTML(item, imgSrc) {
+      return '' +
+        '<div class="print-card">' +
+          '<div class="pc-brand"><h3>Fine Art Gallery</h3><span>EST. 2026</span></div>' +
+          '<img class="pc-img" src="' + imgSrc + '" alt="' + item.title + '">' +
+          '<div class="pc-title">' + item.title + '</div>' +
+          '<div class="pc-artist">' + item.artist + '</div>' +
+          '<div class="pc-facts">' +
+            '<div class="pc-fact"><b>Type</b><span>' + item.type + '</span></div>' +
+            '<div class="pc-fact"><b>Size</b><span>' + item.size + '</span></div>' +
+            '<div class="pc-fact"><b>Year</b><span>' + item.year + '</span></div>' +
+            '<div class="pc-fact pc-price"><b>Price</b><span>' + item.price + '</span></div>' +
+          '</div>' +
+          '<p class="pc-story">' + item.story + '</p>' +
+          '<div class="pc-qr"><div id="pcQr"></div><p>สแกน QR Code เพื่อชมรายละเอียด<br>และเรื่องราวของผลงานชิ้นนี้แบบออนไลน์</p></div>' +
+          '<div class="pc-footer">Fine Art Gallery &middot; ทัณฑสถานบำบัดพิเศษกลาง แดน 9 &middot; ' + item.id.toUpperCase().replace('ARTWORK-', 'No. ') + '</div>' +
+        '</div>';
+    }
+
+    function resizeForCard(src, maxW, cb) {
+      var img = new Image();
+      img.onload = function() {
+        var scale = Math.min(1, maxW / img.naturalWidth);
+        var w = Math.max(1, Math.round(img.naturalWidth * scale));
+        var h = Math.max(1, Math.round(img.naturalHeight * scale));
+        var canvas = document.createElement('canvas');
+        canvas.width = w;
+        canvas.height = h;
+        canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+        cb(canvas.toDataURL('image/jpeg', 0.85));
+      };
+      img.onerror = function() { cb(src); };
+      img.src = src;
+    }
+
+    function renderPrintCard(item, imgSrc, done) {
+      printRoot.innerHTML = cardHTML(item, imgSrc);
+      makeQr(printRoot.querySelector('#pcQr'), artworkUrl(item), 132);
+      printModal.classList.add('open');
+      document.body.style.overflow = 'hidden';
+      if (done) done();
+    }
+
+    function openPrintCard(item, done) {
+      resizeForCard(item.file, 1200, function(resized) {
+        renderPrintCard(item, resized, done);
+      });
+    }
+
+    /// printA4Card(item) — renders the A4 info card and opens the print dialog.
+    /// Use from the console or any handler:  printA4Card(items[0])
+    function printA4Card(item) {
+      openPrintCard(item, function() {
+        setTimeout(function() { window.print(); }, 350);
+      });
+    }
+
+    function closePrintCard() {
+      printModal.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    document.getElementById('doPrintBtn').addEventListener('click', function() { window.print(); });
+    document.getElementById('printCloseBtn').addEventListener('click', closePrintCard);
+    printModal.addEventListener('click', function(e) {
+      if (e.target === printModal) closePrintCard();
+    });
+
+    document.getElementById('printCardBtn').addEventListener('click', function() {
+      openPrintCard(visibleItems[currentIndex]);
+    });
+
+    /* ── Deep linking (#artwork-xx) ── */
+    function parseHash() {
+      var m = location.hash.match(/^#(artwork-\d+)$/);
+      if (!m) return;
+      for (var i = 0; i < visibleItems.length; i++) {
+        if (visibleItems[i].id === m[1]) { openModal(i); return; }
+      }
+    }
+    window.addEventListener('hashchange', parseHash);
+
     renderGallery('all');
+    parseHash();
   </script>
 </body>
 </html>
